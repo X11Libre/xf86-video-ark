@@ -1,4 +1,4 @@
-/* $XFree86: xc/programs/Xserver/hw/xfree86/drivers/ark/ark_accel.c,v 1.7 2002/12/11 17:09:39 dawes Exp $ */
+/* $XFree86: xc/programs/Xserver/hw/xfree86/drivers/ark/ark_accel.c,v 1.6 2002/01/25 21:55:56 tsi Exp $ */
 /*
  *      Copyright 2000  Ani Joshi <ajoshi@unixbox.com>
  *

@@ -1,4 +1,4 @@
-/* $XFree86: xc/programs/Xserver/hw/xfree86/drivers/ark/ark_driver.c,v 1.23 2003/09/24 02:43:18 dawes Exp $ */
+/* $XFree86: xc/programs/Xserver/hw/xfree86/drivers/ark/ark_driver.c,v 1.22 2003/08/23 15:02:53 dawes Exp $ */
 /*
  *	Copyright 2000	Ani Joshi <ajoshi@unixbox.com>
  *
@@ -148,7 +148,7 @@ static XF86ModuleVersionInfo ARKVersRec = {
 	MODULEVENDORSTRING,
 	MODINFOSTRING1,
 	MODINFOSTRING2,
-	XF86_VERSION_CURRENT,
+	XORG_VERSION_CURRENT,
 	VERSION_MAJOR, VERSION_MINOR, PATCHLEVEL,
 	ABI_CLASS_VIDEODRV,
 	ABI_VIDEODRV_VERSION,
