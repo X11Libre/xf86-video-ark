@@ -1,4 +1,4 @@
-/* $XFree86: xc/programs/Xserver/hw/xfree86/drivers/ark/ark.h,v 1.3 2002/01/25 21:55:56 tsi Exp $ */
+/* $XFree86: xc/programs/Xserver/hw/xfree86/drivers/ark/ark.h,v 1.2 2001/01/29 15:15:44 keithp Exp $ */
 /*
  * ark
  */
