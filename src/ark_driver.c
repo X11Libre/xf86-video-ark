@@ -148,7 +148,7 @@ static XF86ModuleVersionInfo ARKVersRec = {
 	MODULEVENDORSTRING,
 	MODINFOSTRING1,
 	MODINFOSTRING2,
-	XORG_VERSION_CURRENT,
+	XF86_VERSION_CURRENT,
 	VERSION_MAJOR, VERSION_MINOR, PATCHLEVEL,
 	ABI_CLASS_VIDEODRV,
 	ABI_VIDEODRV_VERSION,
@@ -391,10 +391,8 @@ static Bool ARKPreInit(ScrnInfoPtr pScrn, int flags)
 	pARK->FBAddress = (rdinx(hwp->PIOOffset + 0x3c4, 0x13) << 16) +
 			  (rdinx(hwp->PIOOffset + 0x3c4, 0x14) << 24);
 
-	pScrn->memPhysBase = pARK->FBAddress;
-
-	xf86DrvMsg(pScrn->scrnIndex, X_PROBED, "Framebuffer @ 0x%lx\n",
-		   (unsigned long)pARK->FBAddress);
+	xf86DrvMsg(pScrn->scrnIndex, X_PROBED, "Framebuffer @ 0x%x\n",
+		   pARK->FBAddress);
 
 	if (!xf86SetGamma(pScrn, gzeros))
 		return FALSE;
