@@ -76,7 +76,7 @@ static unsigned char get_daccomm(IOADDRESS);
 static unsigned char set_daccom(IOADDRESS, unsigned char comm);
 
 
-DriverRec ARK =
+_X_EXPORT DriverRec ARK =
 {
 	ARK_VERSION,
 	DRIVER_NAME,
@@ -148,7 +148,7 @@ static XF86ModuleVersionInfo ARKVersRec = {
 	MODULEVENDORSTRING,
 	MODINFOSTRING1,
 	MODINFOSTRING2,
-	XF86_VERSION_CURRENT,
+	XORG_VERSION_CURRENT,
 	VERSION_MAJOR, VERSION_MINOR, PATCHLEVEL,
 	ABI_CLASS_VIDEODRV,
 	ABI_VIDEODRV_VERSION,
@@ -156,7 +156,7 @@ static XF86ModuleVersionInfo ARKVersRec = {
 	{0, 0, 0, 0}
 };
 
-XF86ModuleData arkModuleData = { &ARKVersRec, ARKSetup, NULL };
+_X_EXPORT XF86ModuleData arkModuleData = { &ARKVersRec, ARKSetup, NULL };
 
 pointer ARKSetup(pointer module, pointer opts, int *errmaj, int *errmin)
 {
@@ -391,8 +391,10 @@ static Bool ARKPreInit(ScrnInfoPtr pScrn, int flags)
 	pARK->FBAddress = (rdinx(hwp->PIOOffset + 0x3c4, 0x13) << 16) +
 			  (rdinx(hwp->PIOOffset + 0x3c4, 0x14) << 24);
 
-	xf86DrvMsg(pScrn->scrnIndex, X_PROBED, "Framebuffer @ 0x%x\n",
-		   pARK->FBAddress);
+	pScrn->memPhysBase = pARK->FBAddress;
+
+	xf86DrvMsg(pScrn->scrnIndex, X_PROBED, "Framebuffer @ 0x%lx\n",
+		   (unsigned long)pARK->FBAddress);
 
 	if (!xf86SetGamma(pScrn, gzeros))
 		return FALSE;
