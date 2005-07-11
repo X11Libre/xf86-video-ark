@@ -28,6 +28,9 @@
  *
  */
 
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
 
 #include <X11/Xarch.h>
 #include "xf86.h"
