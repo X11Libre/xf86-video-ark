@@ -40,9 +40,9 @@ AC_PROG_CC
 
 AH_TOP([#include "xorg-server.h"])
 
-AC_ARG_WITH(module-dir, [  --with-xorg-module-dir=DIR ],
-                        [ moduledir="$withval" ],
-                        [ moduledir="$libdir/xorg/modules" ])
+AC_ARG_WITH(xorg-module-dir, [  --with-xorg-module-dir=DIR ],
+                             [ moduledir="$withval" ],
+                             [ moduledir="$libdir/xorg/modules" ])
 AC_SUBST(moduledir)
 
 # Checks for pkg-config packages
