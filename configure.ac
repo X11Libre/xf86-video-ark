@@ -22,8 +22,8 @@
 
 AC_PREREQ(2.57)
 AC_INIT([xf86-video-ark],
-        0.1.0,
-        [ajax@freedesktop.org],
+        0.5.0,
+        [https://bugs.freedesktop.org/enter_bug.cgi?product=xorg],
         xf86-video-ark)
 
 AC_CONFIG_SRCDIR([Makefile.am])
@@ -58,6 +58,8 @@ AC_SUBST([INCLUDES])
 
 # Checks for header files.
 AC_HEADER_STDC
+
+XORG_RELEASE_VERSION
 
 AC_OUTPUT([
 	Makefile
