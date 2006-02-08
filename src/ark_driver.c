@@ -453,9 +453,6 @@ static Bool ARKPreInit(ScrnInfoPtr pScrn, int flags)
 			pARK->clock_mult = 2;
 	}
 
-	pScrn->numClocks = 1;
-	pScrn->clock[0] = 80000;	/* safe */
-
 	clockRanges = xnfcalloc(sizeof(ClockRange), 1);
 	clockRanges->next = NULL;
 	clockRanges->minClock = 20000;

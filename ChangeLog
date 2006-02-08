@@ -1,3 +1,9 @@
+2006-02-08  Luc Verhaegen  <libv@skynet.be>
+
+	* src/ark_driver.c: (ARKPreInit):
+	
+	Remove wrong usage of pScrn->clock.
+
 2005-12-20  Kevin E. Martin  <kem-at-freedesktop-dot-org>
 
 	* configure.ac:
