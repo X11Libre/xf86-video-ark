@@ -113,34 +113,6 @@ static const OptionInfoRec ARKOptions[] = {
 	{ -1,		  NULL,	     OPTV_NONE,	   {0}, FALSE }
 };
 
-static const char *fbSymbols[] = {
-	"fbPictureInit",
-	"fbScreenInit",
-	NULL
-};
-
-static const char *vgaHWSymbols[] = {
-	"vgaHWFreeHWRec",
-	"vgaHWGetHWRec",
-	"vgaHWGetIOBase",
-	"vgaHWGetIndex",
-	"vgaHWInit",
-	"vgaHWLock",
-	"vgaHWProtect",
-	"vgaHWRestore",
-	"vgaHWSave",
-	"vgaHWSaveScreen",
-	"vgaHWUnlock",
-	"vgaHWUnmapMem",
-	NULL
-};
-
-static const char *xaaSymbols[] = {
-	"XAACreateInfoRec",
-	"XAAInit",
-	NULL
-};
-
 #ifdef XFree86LOADER
 
 MODULESETUPPROTO(ARKSetup);
@@ -167,7 +139,6 @@ pointer ARKSetup(pointer module, pointer opts, int *errmaj, int *errmin)
 	if (!setupDone) {
 		setupDone = TRUE;
 		xf86AddDriver(&ARK, module, 0);
-		LoaderRefSymLists(fbSymbols, vgaHWSymbols, xaaSymbols, NULL);
 		return (pointer) 1;
 	} else {
 		if (errmaj)
@@ -276,8 +247,6 @@ static Bool ARKPreInit(ScrnInfoPtr pScrn, int flags)
 
 	if (!xf86LoadSubModule(pScrn, "vgahw"))
 		return FALSE;
-
-	xf86LoaderReqSymLists(vgaHWSymbols, NULL);
 
 	if (!vgaHWGetHWRec(pScrn))
 		return FALSE;
@@ -499,14 +468,11 @@ static Bool ARKPreInit(ScrnInfoPtr pScrn, int flags)
 	    return FALSE;
 	}
 
-	xf86LoaderReqSymLists(fbSymbols, NULL);
-
 	if (!pARK->NoAccel) {
 		if (!xf86LoadSubModule(pScrn, "xaa")) {
 			ARKFreeRec(pScrn);
 			return FALSE;
 		}
-		xf86LoaderReqSymLists(xaaSymbols, NULL);
 	}
 
 	return TRUE;
