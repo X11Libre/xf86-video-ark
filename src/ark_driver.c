@@ -35,7 +35,6 @@
 #include "xf86_OSproc.h"
 #include "xf86Pci.h"
 #include "xf86PciInfo.h"
-#include "xf86Resources.h"
 #include "xf86fbman.h"
 #include "xf86cmap.h"
 #include "compiler.h"
@@ -313,16 +312,7 @@ static Bool ARKPreInit(ScrnInfoPtr pScrn, int flags)
 	}
 
 	pEnt = xf86GetEntityInfo(pScrn->entityList[0]);
-	if (pEnt->resources) {
-		xfree(pEnt);
-		ARKFreeRec(pScrn);
-		return FALSE;
-	}
-
 	pARK->PciInfo = xf86GetPciInfoForEntity(pEnt->index);
-	xf86RegisterResources(pEnt->index, NULL, ResNone);
-	xf86SetOperatingState(resVgaIo, pEnt->index, ResUnusedOpr);
-	xf86SetOperatingState(resVgaMem, pEnt->index, ResDisableOpr);
 
 	if (pEnt->device->chipset && *pEnt->device->chipset) {
 		pScrn->chipset = pEnt->device->chipset;
