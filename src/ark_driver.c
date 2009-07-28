@@ -207,7 +207,10 @@ static Bool ARKProbe(DriverPtr drv, int flags)
 	if (flags & PROBE_DETECT)
 		foundScreen = TRUE;
 	else for (i=0; i<numUsed; i++) {
-		ScrnInfoPtr pScrn = xf86AllocateScreen(drv, 0);
+	        ScrnInfoPtr pScrn = NULL;
+
+		pScrn = xf86ConfigPciEntity(pScrn, 0, usedChips[i], ARKPciChipsets,
+					    NULL, NULL, NULL, NULL, NULL);
 
 		pScrn->driverVersion = VERSION_MAJOR;
 		pScrn->driverName = DRIVER_NAME;
@@ -221,8 +224,6 @@ static Bool ARKProbe(DriverPtr drv, int flags)
 		pScrn->LeaveVT = ARKLeaveVT;
 		pScrn->FreeScreen = ARKFreeScreen;
 		foundScreen = TRUE;
-		xf86ConfigActivePciEntity(pScrn, usedChips[i], ARKPciChipsets,
-					  NULL, NULL, NULL, NULL, NULL);
 	}
 
 	xfree(usedChips);
