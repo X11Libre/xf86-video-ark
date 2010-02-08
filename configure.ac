@@ -62,7 +62,7 @@ XORG_DRIVER_CHECK_EXT(DPMSExtension, xextproto)
 PKG_CHECK_MODULES(XORG, [xorg-server >= 1.0.99.901] xproto fontsproto $REQUIRED_MODULES)
 
 CFLAGS="$CFLAGS $XORG_CFLAGS "' -I$(top_srcdir)/src'
-INCLUDES="$XORG_INCS "'-I$(top_srcdir)/src'
+INCLUDES='-I$(top_srcdir)/src'
 AC_SUBST([CFLAGS])
 AC_SUBST([INCLUDES])
 
