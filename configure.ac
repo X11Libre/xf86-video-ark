@@ -61,7 +61,7 @@ XORG_DRIVER_CHECK_EXT(DPMSExtension, xextproto)
 # Checks for pkg-config packages
 PKG_CHECK_MODULES(XORG, [xorg-server >= 1.0.99.901] xproto fontsproto $REQUIRED_MODULES)
 
-CFLAGS="$CFLAGS $XORG_CFLAGS "' -I$(top_srcdir)/src'
+CFLAGS="$CFLAGS $XORG_CFLAGS "
 AC_SUBST([CFLAGS])
 
 # Checks for libraries.
