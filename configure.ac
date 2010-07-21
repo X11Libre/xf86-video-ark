@@ -22,9 +22,9 @@
 
 AC_PREREQ([2.60])
 AC_INIT([xf86-video-ark],
-        0.7.2,
+        [0.7.2],
         [https://bugs.freedesktop.org/enter_bug.cgi?product=xorg],
-        xf86-video-ark)
+        [xf86-video-ark])
 
 AC_CONFIG_SRCDIR([Makefile.am])
 AM_CONFIG_HEADER([config.h])
