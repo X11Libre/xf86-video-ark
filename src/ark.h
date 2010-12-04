@@ -34,7 +34,6 @@ typedef struct _ARKRec {
 #endif
 	EntityInfoPtr		pEnt;
 	CARD32			IOAddress;
-	CARD32			FBAddress;
 	unsigned char *		FBBase;
 	unsigned char *		MMIOBase;
 	unsigned long		videoRam;

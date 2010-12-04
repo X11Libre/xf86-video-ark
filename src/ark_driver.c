@@ -363,14 +363,14 @@ static Bool ARKPreInit(ScrnInfoPtr pScrn, int flags)
 	outb(hwp->PIOOffset + hwp->IOBase + 5, tmp & 0x7f);
 	modinx(hwp->PIOOffset + 0x3c4, 0x1d, 0x01, 0x01);
 
-	/* use membase's later on ??? */
-	pARK->FBAddress = (rdinx(hwp->PIOOffset + 0x3c4, 0x13) << 16) +
-			  (rdinx(hwp->PIOOffset + 0x3c4, 0x14) << 24);
-
-	pScrn->memPhysBase = pARK->FBAddress;
+#ifndef XSERVER_LIBPCIACCESS
+	pScrn->memPhysBase = pARK->PciInfo->memBase[0];
+#else
+	pScrn->memPhysBase = pARK->PciInfo->regions[0].base_addr;
+#endif
 
 	xf86DrvMsg(pScrn->scrnIndex, X_PROBED, "Framebuffer @ 0x%lx\n",
-		   (unsigned long)pARK->FBAddress);
+		   (unsigned long)pScrn->memPhysBase);
 
 	if (!xf86SetGamma(pScrn, gzeros))
 		return FALSE;
@@ -748,8 +748,13 @@ static Bool ARKModeInit(ScrnInfoPtr pScrn, DisplayModePtr mode)
 	new->sr10 = rdinx(isaIOBase + 0x3c4, 0x10) & ~0x1f;
 	new->sr10 |= 0x1f;
 
-	new->sr13 = pARK->FBAddress >> 16;
-	new->sr14 = pARK->FBAddress >> 24;
+#ifndef XSERVER_LIBPCIACCESS
+	new->sr13 = pARK->PciInfo->memBase[0] >> 16;
+	new->sr14 = pARK->PciInfo->memBase[0] >> 24;
+#else
+	new->sr13 = pARK->PciInfo->regions[0].base_addr >> 16;
+	new->sr14 = pARK->PciInfo->regions[0].base_addr >> 24;
+#endif
 
 	new->sr12 = rdinx(isaIOBase + 0x3c4, 0x12) & ~0x03;
 	switch (pScrn->videoRam) {
@@ -1022,7 +1027,7 @@ static Bool ARKMapMem(ScrnInfoPtr pScrn)
 					     pARK->PciTag, 0xb8000, 0x8000);
 
 	pARK->FBBase = xf86MapPciMem(pScrn->scrnIndex, VIDMEM_FRAMEBUFFER,
-				     pARK->PciTag, pARK->FBAddress,
+				     pARK->PciTag, pARK->PciInfo->memBase[0],
 				     pScrn->videoRam * 1024);
 #else
 
@@ -1032,14 +1037,17 @@ static Bool ARKMapMem(ScrnInfoPtr pScrn)
 	{
 		void** result = (void**)&pARK->FBBase;
 		int err = pci_device_map_range(pARK->PciInfo,
-					       pARK->FBAddress,
+					       pARK->PciInfo->regions[0].base_addr,
 					       pScrn->videoRam * 1024,
 					       PCI_DEV_MAP_FLAG_WRITABLE |
 					       PCI_DEV_MAP_FLAG_WRITE_COMBINE,
 					       result);
 		
-		if (err) 
+		if (err) {
+			xf86DrvMsg(pScrn->scrnIndex, X_ERROR,
+			   "Cound not map framebuffer: %d\n", err);
 			return FALSE;
+		}
 	}
 #endif
 
