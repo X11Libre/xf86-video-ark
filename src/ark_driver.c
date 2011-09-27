@@ -171,9 +171,6 @@ static Bool ARKGetRec(ScrnInfoPtr pScrn)
 
 static void ARKFreeRec(ScrnInfoPtr pScrn)
 {
-	if (!pScrn->driverPrivate)
-		return;
-
 	free(pScrn->driverPrivate);
 	pScrn->driverPrivate = NULL;
 }
