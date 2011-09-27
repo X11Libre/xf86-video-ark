@@ -174,7 +174,7 @@ static void ARKFreeRec(ScrnInfoPtr pScrn)
 	if (!pScrn->driverPrivate)
 		return;
 
-	xfree(pScrn->driverPrivate);
+	free(pScrn->driverPrivate);
 	pScrn->driverPrivate = NULL;
 }
 
@@ -208,7 +208,7 @@ static Bool ARKProbe(DriverPtr drv, int flags)
 					devSections, numDevSections, drv,
 					&usedChips);
 
-	xfree(devSections);
+	free(devSections);
 
 	if (numUsed <= 0)
 		return FALSE;
@@ -235,7 +235,7 @@ static Bool ARKProbe(DriverPtr drv, int flags)
 		foundScreen = TRUE;
 	}
 
-	xfree(usedChips);
+	free(usedChips);
 
 	return foundScreen;
 }
@@ -306,7 +306,7 @@ static Bool ARKPreInit(ScrnInfoPtr pScrn, int flags)
 	pARK = ARKPTR(pScrn);
 
 	xf86CollectOptions(pScrn, NULL);
-	if (!(pARK->Options = xalloc(sizeof(ARKOptions))))
+	if (!(pARK->Options = malloc(sizeof(ARKOptions))))
 		return FALSE;
 	memcpy(pARK->Options, ARKOptions, sizeof(ARKOptions));
 	xf86ProcessOptions(pScrn->scrnIndex, pScrn->options, pARK->Options);
@@ -355,7 +355,7 @@ static Bool ARKPreInit(ScrnInfoPtr pScrn, int flags)
 		pARK->ChipRev = pARK->PciInfo->revision;
 #endif
 	}
-	xfree(pEnt);
+	free(pEnt);
 
 	xf86DrvMsg(pScrn->scrnIndex, X_CONFIG, "Chipset: \"%s\"\n", pScrn->chipset);
 
