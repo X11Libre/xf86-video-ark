@@ -49,6 +49,12 @@
 #include "xf86Resources.h"
 #endif
 
+#if GET_ABI_MAJOR(ABI_VIDEODRV_VERSION) < 12
+#define PIOOFFSET hwp->PIOOffset
+#else
+#define PIOOFFSET 0
+#endif
+
 #include <string.h>
 
 /*
@@ -358,10 +364,10 @@ static Bool ARKPreInit(ScrnInfoPtr pScrn, int flags)
 #endif
 
 	/* unlock CRTC[0-7] */
-	outb(hwp->PIOOffset + hwp->IOBase + 4, 0x11);
-	tmp = inb(hwp->PIOOffset + hwp->IOBase + 5);
-	outb(hwp->PIOOffset + hwp->IOBase + 5, tmp & 0x7f);
-	modinx(hwp->PIOOffset + 0x3c4, 0x1d, 0x01, 0x01);
+	outb(PIOOFFSET + hwp->IOBase + 4, 0x11);
+	tmp = inb(PIOOFFSET + hwp->IOBase + 5);
+	outb(PIOOFFSET + hwp->IOBase + 5, tmp & 0x7f);
+	modinx(PIOOFFSET + 0x3c4, 0x1d, 0x01, 0x01);
 
 #ifndef XSERVER_LIBPCIACCESS
 	pScrn->memPhysBase = pARK->PciInfo->memBase[0];
@@ -378,7 +384,7 @@ static Bool ARKPreInit(ScrnInfoPtr pScrn, int flags)
 	if (!pScrn->videoRam) {
 		unsigned char sr10;
 
-		sr10 = rdinx(hwp->PIOOffset + 0x3c4, 0x10);
+		sr10 = rdinx(PIOOFFSET + 0x3c4, 0x10);
 		if (pARK->Chipset == PCI_CHIP_1000PV) {
 			if ((sr10 & 0x40) == 0)
 				pScrn->videoRam = 1024;
@@ -403,9 +409,9 @@ static Bool ARKPreInit(ScrnInfoPtr pScrn, int flags)
 	{
 		int man_id, dev_id;
 
-		inb(hwp->PIOOffset + 0x3c6);		/* skip cmd register */
-		man_id = inb(hwp->PIOOffset + 0x3c6);	/* manufacturer id */
-		dev_id = inb(hwp->PIOOffset + 0x3c6);	/* device id */
+		inb(PIOOFFSET + 0x3c6);		/* skip cmd register */
+		man_id = inb(PIOOFFSET + 0x3c6);	/* manufacturer id */
+		dev_id = inb(PIOOFFSET + 0x3c6);	/* device id */
 		if (man_id == 0x84 && dev_id == 0x98) {
 			pARK->ramdac = ZOOMDAC;
 			pARK->dac_width = 16;
@@ -576,7 +582,7 @@ static void ARKSave(ScrnInfoPtr pScrn)
 	ARKPtr pARK = ARKPTR(pScrn);
 	ARKRegPtr save = &pARK->SavedRegs;
 	vgaHWPtr hwp = VGAHWPTR(pScrn);
-	IOADDRESS isaIOBase = hwp->PIOOffset;
+	IOADDRESS isaIOBase = PIOOFFSET;
 	IOADDRESS vgaIOBase = isaIOBase + hwp->IOBase;
 
 	vgaHWUnlock(hwp);
@@ -641,7 +647,7 @@ static Bool ARKModeInit(ScrnInfoPtr pScrn, DisplayModePtr mode)
 	int multiplexing, dac16, modepitch;
 	vgaHWPtr hwp = VGAHWPTR(pScrn);
 	vgaRegPtr pVga = &hwp->ModeReg;
-	IOADDRESS isaIOBase = hwp->PIOOffset;
+	IOADDRESS isaIOBase = PIOOFFSET;
 	IOADDRESS vgaIOBase = isaIOBase + hwp->IOBase;
 	unsigned char tmp;
 	int offset;
@@ -891,7 +897,7 @@ static void ARKAdjustFrame(int scrnIndex, int x, int y, int flags)
 	ScrnInfoPtr pScrn = xf86Screens[scrnIndex];
 	ARKPtr pARK = ARKPTR(pScrn);
 	vgaHWPtr hwp = VGAHWPTR(pScrn);
-	IOADDRESS vgaIOBase = hwp->PIOOffset + hwp->IOBase;
+	IOADDRESS vgaIOBase = PIOOFFSET + hwp->IOBase;
 	int base;
 
 	base = ((y * pScrn->displayWidth + x) *
@@ -918,7 +924,7 @@ static void ARKWriteMode(ScrnInfoPtr pScrn, vgaRegPtr pVga, ARKRegPtr new)
 {
 	ARKPtr pARK = ARKPTR(pScrn);
 	vgaHWPtr hwp = VGAHWPTR(pScrn);
-	IOADDRESS isaIOBase = hwp->PIOOffset;
+	IOADDRESS isaIOBase = PIOOFFSET;
 	IOADDRESS vgaIOBase = isaIOBase + hwp->IOBase;
 
 	vgaHWProtect(pScrn, TRUE);
@@ -1115,7 +1121,10 @@ static void ARKLoadPalette(ScrnInfoPtr pScrn, int numColors,
 			   int *indicies, LOCO *colors,
 			   VisualPtr pVisual)
 {
-	IOADDRESS isaIOBase = pScrn->domainIOBase;
+	IOADDRESS isaIOBase = 0;
+#if GET_ABI_MAJOR(ABI_VIDEODRV_VERSION) < 12
+	isaIOBase += pScrn->domainIOBase;
+#endif
 	int i, index;
 
 	for (i=0; i<numColors; i++) {
