@@ -471,8 +471,9 @@ static Bool ARKPreInit(ScrnInfoPtr pScrn, int flags)
 
 	if (!pARK->NoAccel) {
 		if (!xf86LoadSubModule(pScrn, "xaa")) {
-			ARKFreeRec(pScrn);
-			return FALSE;
+			xf86DrvMsg(pScrn->scrnIndex, X_WARNING,
+				   "XAA not available\n");
+			pARK->NoAccel = 1;
 		}
 	}
 
