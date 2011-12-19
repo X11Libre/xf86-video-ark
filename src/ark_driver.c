@@ -262,6 +262,7 @@ static Bool ARKPreInit(ScrnInfoPtr pScrn, int flags)
 		return FALSE;
 
 	hwp = VGAHWPTR(pScrn);
+	vgaHWASetStdFuncs(hwp);
 	vgaHWGetIOBase(hwp);
 
 	pScrn->monitor = pScrn->confScreen->monitor;
