@@ -82,8 +82,8 @@ static void ARKLoadPalette(ScrnInfoPtr pScrn, int numColors,
 static void ARKWriteMode(ScrnInfoPtr pScrn, vgaRegPtr pVga, ARKRegPtr new);
 
 /* helpers */
-static unsigned char get_daccomm(IOADDRESS);
-static unsigned char set_daccom(IOADDRESS, unsigned char comm);
+static unsigned char get_daccomm(unsigned long);
+static unsigned char set_daccom(unsigned long, unsigned char comm);
 
 
 _X_EXPORT DriverRec ARK =
@@ -580,8 +580,8 @@ static void ARKSave(ScrnInfoPtr pScrn)
 	ARKPtr pARK = ARKPTR(pScrn);
 	ARKRegPtr save = &pARK->SavedRegs;
 	vgaHWPtr hwp = VGAHWPTR(pScrn);
-	IOADDRESS isaIOBase = PIOOFFSET;
-	IOADDRESS vgaIOBase = isaIOBase + hwp->IOBase;
+	unsigned long isaIOBase = PIOOFFSET;
+	unsigned long vgaIOBase = isaIOBase + hwp->IOBase;
 
 	vgaHWUnlock(hwp);
 	vgaHWSave(pScrn, &hwp->SavedReg, VGA_SR_ALL);
@@ -645,8 +645,8 @@ static Bool ARKModeInit(ScrnInfoPtr pScrn, DisplayModePtr mode)
 	int multiplexing, dac16, modepitch;
 	vgaHWPtr hwp = VGAHWPTR(pScrn);
 	vgaRegPtr pVga = &hwp->ModeReg;
-	IOADDRESS isaIOBase = PIOOFFSET;
-	IOADDRESS vgaIOBase = isaIOBase + hwp->IOBase;
+	unsigned long isaIOBase = PIOOFFSET;
+	unsigned long vgaIOBase = isaIOBase + hwp->IOBase;
 	unsigned char tmp;
 	int offset;
 
@@ -895,7 +895,7 @@ static void ARKAdjustFrame(int scrnIndex, int x, int y, int flags)
 	ScrnInfoPtr pScrn = xf86Screens[scrnIndex];
 	ARKPtr pARK = ARKPTR(pScrn);
 	vgaHWPtr hwp = VGAHWPTR(pScrn);
-	IOADDRESS vgaIOBase = PIOOFFSET + hwp->IOBase;
+	unsigned long vgaIOBase = PIOOFFSET + hwp->IOBase;
 	int base;
 
 	base = ((y * pScrn->displayWidth + x) *
@@ -922,8 +922,8 @@ static void ARKWriteMode(ScrnInfoPtr pScrn, vgaRegPtr pVga, ARKRegPtr new)
 {
 	ARKPtr pARK = ARKPTR(pScrn);
 	vgaHWPtr hwp = VGAHWPTR(pScrn);
-	IOADDRESS isaIOBase = PIOOFFSET;
-	IOADDRESS vgaIOBase = isaIOBase + hwp->IOBase;
+	unsigned long isaIOBase = PIOOFFSET;
+	unsigned long vgaIOBase = isaIOBase + hwp->IOBase;
 
 	vgaHWProtect(pScrn, TRUE);
 
@@ -1119,7 +1119,7 @@ static void ARKLoadPalette(ScrnInfoPtr pScrn, int numColors,
 			   int *indicies, LOCO *colors,
 			   VisualPtr pVisual)
 {
-	IOADDRESS isaIOBase = 0;
+	unsigned long isaIOBase = 0;
 #if GET_ABI_MAJOR(ABI_VIDEODRV_VERSION) < 12
 	isaIOBase += pScrn->domainIOBase;
 #endif
@@ -1145,7 +1145,7 @@ static void ARKFreeScreen(int scrnIndex, int flags)
 }
 
 
-static unsigned char get_daccomm(IOADDRESS isaIOBase)
+static unsigned char get_daccomm(unsigned long isaIOBase)
 {
 	unsigned char tmp;
 
@@ -1161,7 +1161,7 @@ static unsigned char get_daccomm(IOADDRESS isaIOBase)
 }
 
 
-static unsigned char set_daccom(IOADDRESS isaIOBase, unsigned char comm)
+static unsigned char set_daccom(unsigned long isaIOBase, unsigned char comm)
 {
 #if 0
 	outb(isaIOBase + 0x3c8, 0);

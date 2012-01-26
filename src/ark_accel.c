@@ -46,7 +46,7 @@ static int curx, cury, cmd_flags;
 
 static void ARKSync(ScrnInfoPtr pScrn)
 {
-	IOADDRESS port = 0x3cb;
+	unsigned long port = 0x3cb;
 #if ABI_VIDEODRV_VERSION < 12
 	port += pScrn->domainIOBase + 0x3cb;
 #endif
