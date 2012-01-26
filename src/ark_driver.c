@@ -1035,8 +1035,9 @@ static Bool ARKMapMem(ScrnInfoPtr pScrn)
 				     pScrn->videoRam * 1024);
 #else
 
-	pARK->MMIOBase = xf86MapDomainMemory(pScrn->scrnIndex, VIDMEM_MMIO,
-					     pARK->PciInfo, 0xb8000, 0x8000);
+	(void) pci_device_map_legacy(pARK->PciInfo, 0xb8000, 0x8000,
+				     PCI_DEV_MAP_FLAG_WRITABLE,
+				     (void **)&pARK->MMIOBase);
 
 	{
 		void** result = (void**)&pARK->FBBase;
