@@ -1037,10 +1037,10 @@ static Bool ARKMapMem(ScrnInfoPtr pScrn)
 
 	(void) pci_device_map_legacy(pARK->PciInfo, 0xb8000, 0x8000,
 				     PCI_DEV_MAP_FLAG_WRITABLE,
-				     (void **)&pARK->MMIOBase);
+				     &pARK->MMIOBase);
 
 	{
-		void** result = (void**)&pARK->FBBase;
+		void** result = &pARK->FBBase;
 		int err = pci_device_map_range(pARK->PciInfo,
 					       pARK->PciInfo->regions[0].base_addr,
 					       pScrn->videoRam * 1024,
@@ -1074,7 +1074,7 @@ static void ARKUnmapMem(ScrnInfoPtr pScrn)
 	vgaHWUnmapMem(pScrn);
 
 #ifndef XSERVER_LIBPCIACCESS
-	xf86UnMapVidMem(pScrn->scrnIndex, (pointer)pARK->FBBase,
+	xf86UnMapVidMem(pScrn->scrnIndex, pARK->FBBase,
 			pScrn->videoRam * 1024);
 #else
 	pci_device_unmap_range(pARK->PciInfo, pARK->FBBase, pScrn->videoRam * 1024);
