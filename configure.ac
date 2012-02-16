@@ -53,8 +53,6 @@ AC_ARG_WITH(xorg-module-dir, [  --with-xorg-module-dir=DIR ],
 AC_SUBST(moduledir)
 
 # Store the list of server defined optional extensions in REQUIRED_MODULES
-XORG_DRIVER_CHECK_EXT(RANDR, randrproto)
-XORG_DRIVER_CHECK_EXT(RENDER, renderproto)
 XORG_DRIVER_CHECK_EXT(DPMSExtension, xextproto)
 
 # Obtain compiler/linker options for the driver dependencies
