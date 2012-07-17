@@ -189,7 +189,7 @@ static void ARKSubsequentScreenToScreenCopy(ScrnInfoPtr pScrn,
 Bool ARKAccelInit(ScreenPtr pScreen)
 {
 #ifdef HAVE_XAA_H
-	ScrnInfoPtr pScrn = xf86Screens[pScreen->myNum];
+	ScrnInfoPtr pScrn = xf86ScreenToScrn(pScreen);
 	ARKPtr pARK = ARKPTR(pScrn);
 	XAAInfoRecPtr pXAA;
 
