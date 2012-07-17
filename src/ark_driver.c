@@ -37,7 +37,6 @@
 #include "xf86fbman.h"
 #include "xf86cmap.h"
 #include "compiler.h"
-#include "xaa.h"
 #include "mipointer.h"
 #include "micmap.h"
 #include "mibstore.h"

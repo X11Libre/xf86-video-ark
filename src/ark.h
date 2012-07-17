@@ -7,7 +7,9 @@
 
 #include "xf86.h"
 #include "xf86Pci.h"
+#ifdef HAVE_XAA_H
 #include "xaa.h"
+#endif
 #include "vgaHW.h"
 
 #define PCI_VENDOR_ARK			0xEDD8
@@ -46,7 +48,9 @@ typedef struct _ARKRec {
 	unsigned int		Flags;
 	Bool			NoAccel;
 	CARD32			Bus;
+#ifdef HAVE_XAA_H
 	XAAInfoRecPtr		pXAA;
+#endif
 	int			Chipset, ChipRev;
 	int			clock_mult;
 	int			dac_width;
