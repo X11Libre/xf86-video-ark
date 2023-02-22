@@ -1,5 +1,7 @@
-xf86-video-ark - Ark Logic video driver for the Xorg X server
+xf86-video-ark - ARK Logic video driver for the Xorg X server
 -------------------------------------------------------------
+
+ARK Logic was a PCI video card maker in business from 1993-1999.
 
 All questions regarding this software should be directed at the
 Xorg mailing list:
