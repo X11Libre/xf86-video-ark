@@ -87,9 +87,9 @@ Bool ARKAccelInit(ScreenPtr pScreen);
     } while(0)
 #define modinx(port, ind, mask, bits)					\
     do {								\
-	unsigned char tmp;						\
-	tmp = (rdinx((port), (ind)) & ~(mask)) | ((bits) & (mask));	\
-	wrinx((port), (ind), tmp);					\
+	unsigned char tmpc;						\
+	tmpc = (rdinx((port), (ind)) & ~(mask)) | ((bits) & (mask));	\
+	wrinx((port), (ind), tmpc);					\
     } while(0)
 
 #endif /* _ARK_H */
