@@ -160,7 +160,7 @@ static Bool ARKGetRec(ScrnInfoPtr pScrn)
 	if (pScrn->driverPrivate)
 		return TRUE;
 
-	pScrn->driverPrivate = xnfcalloc(sizeof(ARKRec), 1);
+	pScrn->driverPrivate = XNFcallocarray(sizeof(ARKRec), 1);
 
 	return TRUE;
 }
@@ -425,7 +425,7 @@ static Bool ARKPreInit(ScrnInfoPtr pScrn, int flags)
 			pARK->clock_mult = 2;
 	}
 
-	clockRanges = xnfcalloc(sizeof(ClockRange), 1);
+	clockRanges = XNFcallocarray(sizeof(ClockRange), 1);
 	clockRanges->next = NULL;
 	clockRanges->minClock = 20000;
 	clockRanges->maxClock = 80000;
