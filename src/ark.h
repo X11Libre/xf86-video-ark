@@ -7,9 +7,6 @@
 
 #include "xf86.h"
 #include "xf86Pci.h"
-#ifdef HAVE_XAA_H
-#include "xaa.h"
-#endif
 #include "vgaHW.h"
 
 #include "compat-api.h"
@@ -77,8 +74,6 @@ typedef struct _ARKRec {
 
 #define	ZOOMDAC		0x404
 #define ATT490		0x101
-
-Bool ARKAccelInit(ScreenPtr pScreen);
 
 #define rdinx(port, ind)	(outb((port), (ind)), inb((port) + 1))
 #define wrinx(port, ind, val)						\

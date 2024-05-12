@@ -42,15 +42,7 @@
 #include "fb.h"
 #include "ark.h"
 
-#if GET_ABI_MAJOR(ABI_VIDEODRV_VERSION) < 6
-#include "xf86Resources.h"
-#endif
-
-#if GET_ABI_MAJOR(ABI_VIDEODRV_VERSION) < 12
-#define PIOOFFSET hwp->PIOOffset
-#else
-#define PIOOFFSET 0
-#endif
+#define PIOOFFSET 0  /* was hwp->PIOOffset in ABI_VIDEODRV_VERSION < 12 */
 
 #include <string.h>
 
@@ -540,14 +532,9 @@ static Bool ARKScreenInit(SCREEN_INIT_ARGS_DECL)
 	xf86SetBackingStore(pScreen);
 
 	if (!pARK->NoAccel) {
-		if (ARKAccelInit(pScreen)) {
-			xf86DrvMsg(pScrn->scrnIndex, X_INFO, "Acceleration enabled\n");
-		} else {
-			xf86DrvMsg(pScrn->scrnIndex, X_ERROR, "Acceleration initialization failed\n");
-			xf86DrvMsg(pScrn->scrnIndex, X_INFO, "Acceleration disabled\n");
-		}
+            xf86DrvMsg(pScrn->scrnIndex, X_INFO, "Acceleration not available\n");
 	} else {
-			xf86DrvMsg(pScrn->scrnIndex, X_INFO, "Acceleration disabled\n");
+            xf86DrvMsg(pScrn->scrnIndex, X_INFO, "Acceleration disabled\n");
 	}
 
 	miDCInitialize(pScreen, xf86GetPointerScreenFuncs());
@@ -1117,11 +1104,9 @@ static void ARKLoadPalette(ScrnInfoPtr pScrn, int numColors,
 			   VisualPtr pVisual)
 {
 	unsigned long isaIOBase = 0;
-#if GET_ABI_MAJOR(ABI_VIDEODRV_VERSION) < 12
-	isaIOBase += pScrn->domainIOBase;
-#endif
 	int i, index;
 
+	/* isaIOBase += pScrn->domainIOBase; */
 	for (i=0; i<numColors; i++) {
 		index = indices[i];
 		outb(isaIOBase + 0x3c8, index);
