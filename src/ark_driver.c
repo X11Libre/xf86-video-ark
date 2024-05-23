@@ -53,18 +53,18 @@ static const OptionInfoRec * ARKAvailableOptions(int chipid, int busid);
 static void ARKIdentify(int flags);
 static Bool ARKProbe(DriverPtr drv, int flags);
 static Bool ARKPreInit(ScrnInfoPtr pScrn, int flags);
-static Bool ARKEnterVT(VT_FUNC_ARGS_DECL);
-static void ARKLeaveVT(VT_FUNC_ARGS_DECL);
+static Bool ARKEnterVT(ScrnInfoPtr pScrn);
+static void ARKLeaveVT(ScrnInfoPtr pScrn);
 static void ARKSave(ScrnInfoPtr pScrn);
-static Bool ARKScreenInit(SCREEN_INIT_ARGS_DECL);
+static Bool ARKScreenInit(ScreenPtr pScreen, int argc, char **argv);
 static Bool ARKMapMem(ScrnInfoPtr pScrn);
 static void ARKUnmapMem(ScrnInfoPtr pScrn);
 static Bool ARKModeInit(ScrnInfoPtr pScrn, DisplayModePtr mode);
-static void ARKAdjustFrame(ADJUST_FRAME_ARGS_DECL);
-Bool ARKSwitchMode(SWITCH_MODE_ARGS_DECL);
-Bool ARKCloseScreen(CLOSE_SCREEN_ARGS_DECL);
+static void ARKAdjustFrame(ScrnInfoPtr pScrn, int x, int y);
+Bool ARKSwitchMode(ScrnInfoPtr pScrn, DisplayModePtr mode);
+Bool ARKCloseScreen(ScreenPtr pScreen);
 Bool ARKSaveScreen(ScreenPtr pScreen, int mode);
-static void ARKFreeScreen(FREE_SCREEN_ARGS_DECL);
+static void ARKFreeScreen(ScrnInfoPtr pScrn);
 static void ARKLoadPalette(ScrnInfoPtr pScrn, int numColors,
 			   int *indices, LOCO *colors,
 			   VisualPtr pVisual);
@@ -466,7 +466,7 @@ static Bool ARKPreInit(ScrnInfoPtr pScrn, int flags)
 	return TRUE;
 }
 
-static Bool ARKScreenInit(SCREEN_INIT_ARGS_DECL)
+static Bool ARKScreenInit(ScreenPtr pScreen, int argc, char **argv)
 {
 	ScrnInfoPtr pScrn = xf86ScreenToScrn(pScreen);
 	ARKPtr pARK = ARKPTR(pScrn);
@@ -487,7 +487,7 @@ static Bool ARKScreenInit(SCREEN_INIT_ARGS_DECL)
 
 	ARKSaveScreen(pScreen, SCREEN_SAVER_ON);
 
-	pScrn->AdjustFrame(ADJUST_FRAME_ARGS(pScrn, pScrn->frameX0, pScrn->frameY0));
+	pScrn->AdjustFrame(pScrn, pScrn->frameX0, pScrn->frameY0);
 
 	miClearVisualTypes();
 	if (pScrn->bitsPerPixel > 8) {
@@ -872,9 +872,8 @@ static Bool ARKModeInit(ScrnInfoPtr pScrn, DisplayModePtr mode)
 }
 
 
-static void ARKAdjustFrame(ADJUST_FRAME_ARGS_DECL)
+static void ARKAdjustFrame(ScrnInfoPtr pScrn, int x, int y)
 {
-	SCRN_INFO_PTR(arg);
 	ARKPtr pARK = ARKPTR(pScrn);
 	vgaHWPtr hwp = VGAHWPTR(pScrn);
 	unsigned long vgaIOBase = PIOOFFSET + hwp->IOBase;
@@ -971,23 +970,20 @@ static void ARKWriteMode(ScrnInfoPtr pScrn, vgaRegPtr pVga, ARKRegPtr new)
 }
 
 
-static Bool ARKEnterVT(VT_FUNC_ARGS_DECL)
+static Bool ARKEnterVT(ScrnInfoPtr pScrn)
 {
-	SCRN_INFO_PTR(arg);
-
 	if (!ARKModeInit(pScrn, pScrn->currentMode))
 		return FALSE;
 
-	ARKAdjustFrame(ADJUST_FRAME_ARGS(pScrn, pScrn->frameX0, pScrn->frameY0));
+	ARKAdjustFrame(pScrn, pScrn->frameX0, pScrn->frameY0);
 
 	return TRUE;
 }
 
 
 
-static void ARKLeaveVT(VT_FUNC_ARGS_DECL)
+static void ARKLeaveVT(ScrnInfoPtr pScrn)
 {
-	SCRN_INFO_PTR(arg);
 	ARKPtr pARK = ARKPTR(pScrn);
 	ARKRegPtr old = &pARK->SavedRegs;
 	vgaHWPtr hwp = VGAHWPTR(pScrn);
@@ -1064,7 +1060,7 @@ static void ARKUnmapMem(ScrnInfoPtr pScrn)
 }
 
 
-Bool ARKCloseScreen(CLOSE_SCREEN_ARGS_DECL)
+Bool ARKCloseScreen(ScreenPtr pScreen)
 {
 	ScrnInfoPtr pScrn = xf86ScreenToScrn(pScreen);
 	ARKPtr pARK = ARKPTR(pScrn);
@@ -1082,7 +1078,7 @@ Bool ARKCloseScreen(CLOSE_SCREEN_ARGS_DECL)
 
 	/* XXX Shouldn't XAADestroyInfoRec() be called? */
 
-	return (*pScreen->CloseScreen)(CLOSE_SCREEN_ARGS);
+	return (*pScreen->CloseScreen)(pScreen);
 }
 
 
@@ -1092,9 +1088,8 @@ Bool ARKSaveScreen(ScreenPtr pScreen, int mode)
 }
 
 
-Bool ARKSwitchMode(SWITCH_MODE_ARGS_DECL)
+Bool ARKSwitchMode(ScrnInfoPtr pScrn, DisplayModePtr mode)
 {
-	SCRN_INFO_PTR(arg);
 	return ARKModeInit(pScrn, mode);
 }
 
@@ -1117,10 +1112,8 @@ static void ARKLoadPalette(ScrnInfoPtr pScrn, int numColors,
 }
 
 
-static void ARKFreeScreen(FREE_SCREEN_ARGS_DECL)
+static void ARKFreeScreen(ScrnInfoPtr pScrn)
 {
-	SCRN_INFO_PTR(arg);
-
 	vgaHWFreeHWRec(pScrn);
 
 	ARKFreeRec(pScrn);

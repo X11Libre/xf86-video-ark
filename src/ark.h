@@ -9,7 +9,6 @@
 #include "xf86Pci.h"
 #include "vgaHW.h"
 
-#include "compat-api.h"
 #define PCI_VENDOR_ARK			0xEDD8
 #define PCI_CHIP_1000PV			0xA091
 #define PCI_CHIP_2000PV			0xA099
@@ -56,7 +55,7 @@ typedef struct _ARKRec {
 	int			ramdac;
 	ARKRegRec		SavedRegs;	/* original mode */
 	ARKRegRec		ModeRegs;	/* current mode */
-	Bool			(*CloseScreen)(CLOSE_SCREEN_ARGS_DECL);
+	Bool			(*CloseScreen)(ScreenPtr pScreen);
 } ARKRec, *ARKPtr;
 
 
