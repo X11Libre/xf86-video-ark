@@ -45,9 +45,6 @@ typedef struct _ARKRec {
 	unsigned int		Flags;
 	Bool			NoAccel;
 	CARD32			Bus;
-#ifdef HAVE_XAA_H
-	XAAInfoRecPtr		pXAA;
-#endif
 	int			Chipset, ChipRev;
 	int			clock_mult;
 	int			dac_width;
