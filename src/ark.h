@@ -30,7 +30,7 @@ typedef struct _ARKRegRec {
 
 
 typedef struct _ARKRec {
-#ifndef XSERVER_LIBPCIACCESS	
+#ifndef XSERVER_LIBPCIACCESS
 	pciVideoPtr		PciInfo;
 	PCITAG			PciTag;
 #else

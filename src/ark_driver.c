@@ -6,7 +6,7 @@
  * Permission to use, copy, modify, distribute, and sell this software and its
  * documentation for any purpose is hereby granted without fee, provided that
  * the above copyright notice appear in all copies and that both that copyright
- * notice and this permission notice appear in supporting documentation and   
+ * notice and this permission notice appear in supporting documentation and
  * that the name of Ani Joshi not be used in advertising or
  * publicity pertaining to distribution of the software without specific,
  * written prior permission.  Ani Joshi makes no representations
@@ -726,7 +726,7 @@ static Bool ARKModeInit(ScrnInfoPtr pScrn, DisplayModePtr mode)
 				   "Unsupported screen width %d\n",
 				   pScrn->displayWidth);
 			return FALSE;
-	}	
+	}
 
 	new->sr17 &= ~0xc7;
 	new->sr17 |= modepitch;
@@ -1025,7 +1025,7 @@ static Bool ARKMapMem(ScrnInfoPtr pScrn)
 					       PCI_DEV_MAP_FLAG_WRITABLE |
 					       PCI_DEV_MAP_FLAG_WRITE_COMBINE,
 					       result);
-		
+
 		if (err) {
 			xf86DrvMsg(pScrn->scrnIndex, X_ERROR,
 			   "Could not map framebuffer: %d\n", err);
