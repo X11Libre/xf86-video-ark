@@ -75,7 +75,7 @@ static unsigned char set_daccom(unsigned long, unsigned char comm);
 _X_EXPORT DriverRec ARK =
 {
 	ARK_VERSION,
-	DRIVER_NAME,
+	"ark",
 	ARKIdentify,
 	ARKProbe,
 	ARKAvailableOptions,
@@ -204,7 +204,7 @@ static Bool ARKProbe(DriverPtr drv, int flags)
 					    NULL, NULL, NULL, NULL, NULL);
 
 		pScrn->driverVersion = VERSION_MAJOR;
-		pScrn->driverName = DRIVER_NAME;
+		pScrn->driverName = "ark";
 		pScrn->name = "ark";
 		pScrn->Probe = ARKProbe;
 		pScrn->PreInit = ARKPreInit;

@@ -59,7 +59,6 @@ typedef struct _ARKRec {
 #define ARKPTR(p)	((ARKPtr)((p)->driverPrivate))
 
 
-#define DRIVER_NAME	"ark"
 #define DRIVER_VERSION	PACKAGE_VERSION
 #define VERSION_MAJOR	PACKAGE_VERSION_MAJOR
 #define VERSION_MINOR	PACKAGE_VERSION_MINOR
