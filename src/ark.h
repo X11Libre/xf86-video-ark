@@ -30,12 +30,7 @@ typedef struct _ARKRegRec {
 
 
 typedef struct _ARKRec {
-#ifndef XSERVER_LIBPCIACCESS
-	pciVideoPtr		PciInfo;
-	PCITAG			PciTag;
-#else
 	struct pci_device       *PciInfo;
-#endif
 	EntityInfoPtr		pEnt;
 	CARD32			IOAddress;
 	pointer			FBBase;

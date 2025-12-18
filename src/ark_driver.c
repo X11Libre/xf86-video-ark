@@ -312,11 +312,7 @@ static Bool ARKPreInit(ScrnInfoPtr pScrn, int flags)
 		xf86DrvMsg(pScrn->scrnIndex, X_CONFIG, "ChipID override: 0x%04X\n",
 			   pARK->Chipset);
 	} else {
-#ifndef XSERVER_LIBPCIACCESS
-		pARK->Chipset = pARK->PciInfo->chipType;
-#else
 		pARK->Chipset = pARK->PciInfo->device_id;
-#endif
 		pScrn->chipset = (char *)xf86TokenToString(ARKChipsets,
 							   pARK->Chipset);
 	}
@@ -326,20 +322,11 @@ static Bool ARKPreInit(ScrnInfoPtr pScrn, int flags)
 		xf86DrvMsg(pScrn->scrnIndex, X_CONFIG, "ChipRev override: %d\n",
 			   pARK->ChipRev);
 	} else {
-#ifndef XSERVER_LIBPCIACCESS
-		pARK->ChipRev = pARK->PciInfo->chipRev;
-#else
 		pARK->ChipRev = pARK->PciInfo->revision;
-#endif
 	}
 	free(pEnt);
 
 	xf86DrvMsg(pScrn->scrnIndex, X_CONFIG, "Chipset: \"%s\"\n", pScrn->chipset);
-
-#ifndef XSERVER_LIBPCIACCESS
-	pARK->PciTag = pciTag(pARK->PciInfo->bus, pARK->PciInfo->device,
-			      pARK->PciInfo->func);
-#endif
 
 	/* unlock CRTC[0-7] */
 	outb(PIOOFFSET + hwp->IOBase + 4, 0x11);
@@ -347,11 +334,7 @@ static Bool ARKPreInit(ScrnInfoPtr pScrn, int flags)
 	outb(PIOOFFSET + hwp->IOBase + 5, tmp & 0x7f);
 	modinx(PIOOFFSET + 0x3c4, 0x1d, 0x01, 0x01);
 
-#ifndef XSERVER_LIBPCIACCESS
-	pScrn->memPhysBase = pARK->PciInfo->memBase[0];
-#else
 	pScrn->memPhysBase = pARK->PciInfo->regions[0].base_addr;
-#endif
 
 	xf86DrvMsg(pScrn->scrnIndex, X_PROBED, "Framebuffer @ 0x%lx\n",
 		   (unsigned long)pScrn->memPhysBase);
@@ -726,13 +709,8 @@ static Bool ARKModeInit(ScrnInfoPtr pScrn, DisplayModePtr mode)
 	new->sr10 = rdinx(isaIOBase + 0x3c4, 0x10) & ~0x1f;
 	new->sr10 |= 0x1f;
 
-#ifndef XSERVER_LIBPCIACCESS
-	new->sr13 = pARK->PciInfo->memBase[0] >> 16;
-	new->sr14 = pARK->PciInfo->memBase[0] >> 24;
-#else
 	new->sr13 = pARK->PciInfo->regions[0].base_addr >> 16;
 	new->sr14 = pARK->PciInfo->regions[0].base_addr >> 24;
-#endif
 
 	new->sr12 = rdinx(isaIOBase + 0x3c4, 0x12) & ~0x03;
 	switch (pScrn->videoRam) {
@@ -996,15 +974,6 @@ static Bool ARKMapMem(ScrnInfoPtr pScrn)
 	/* extended to cover MMIO space at 0xB8000 */
 	hwp->MapSize = 0x20000;
 
-#ifndef XSERVER_LIBPCIACCESS
-	pARK->MMIOBase = xf86MapDomainMemory(pScrn->scrnIndex, VIDMEM_MMIO,
-					     pARK->PciTag, 0xb8000, 0x8000);
-
-	pARK->FBBase = xf86MapPciMem(pScrn->scrnIndex, VIDMEM_FRAMEBUFFER,
-				     pARK->PciTag, pARK->PciInfo->memBase[0],
-				     pScrn->videoRam * 1024);
-#else
-
 	(void) pci_device_map_legacy(pARK->PciInfo, 0xb8000, 0x8000,
 				     PCI_DEV_MAP_FLAG_WRITABLE,
 				     &pARK->MMIOBase);
@@ -1024,7 +993,6 @@ static Bool ARKMapMem(ScrnInfoPtr pScrn)
 			return FALSE;
 		}
 	}
-#endif
 
 	if (!pARK->FBBase) {
 		xf86DrvMsg(pScrn->scrnIndex, X_ERROR,
@@ -1043,12 +1011,7 @@ static void ARKUnmapMem(ScrnInfoPtr pScrn)
 	/* XXX vgaHWMapMem() isn't called explicitly, so is this correct? */
 	vgaHWUnmapMem(pScrn);
 
-#ifndef XSERVER_LIBPCIACCESS
-	xf86UnMapVidMem(pScrn->scrnIndex, pARK->FBBase,
-			pScrn->videoRam * 1024);
-#else
 	pci_device_unmap_range(pARK->PciInfo, pARK->FBBase, pScrn->videoRam * 1024);
-#endif
 }
 
 
