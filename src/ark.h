@@ -33,8 +33,8 @@ typedef struct _ARKRec {
 	struct pci_device       *PciInfo;
 	EntityInfoPtr		pEnt;
 	CARD32			IOAddress;
-	pointer			FBBase;
-	pointer			MMIOBase;
+	void*			FBBase;
+	void*			MMIOBase;
 	unsigned long		videoRam;
 	OptionInfoPtr		Options;
 	unsigned int		Flags;
