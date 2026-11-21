@@ -124,6 +124,10 @@ static XF86ModuleVersionInfo ARKVersRec = {
 
 _X_EXPORT XF86ModuleData arkModuleData = { &ARKVersRec, ARKSetup, NULL };
 
+#ifdef XF86_MODULE_VERSION_SUFFIX
+XF86_MODULE_VERSION_SUFFIX(ark, ARK_VERSION_SUFFIX);
+#endif
+
 void *ARKSetup(void *module, void *opts, int *errmaj, int *errmin)
 {
 	static Bool setupDone = FALSE;
