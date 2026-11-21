@@ -115,7 +115,7 @@ static XF86ModuleVersionInfo ARKVersRec = {
 	MODINFOSTRING1,
 	MODINFOSTRING2,
 	XORG_VERSION_CURRENT,
-	VERSION_MAJOR, VERSION_MINOR, PATCHLEVEL,
+	ARK_VERSION_MAJOR, ARK_VERSION_MINOR, ARK_PATCHLEVEL,
 	ABI_CLASS_VIDEODRV,
 	ABI_VIDEODRV_VERSION,
 	MOD_CLASS_VIDEODRV,
@@ -162,7 +162,7 @@ static const OptionInfoRec * ARKAvailableOptions(int chipid, int busid)
 
 static void ARKIdentify(int flags)
 {
-	xf86PrintChipsets("ARK", "driver (version " DRIVER_VERSION " for ARK Logic chipset",
+	xf86PrintChipsets("ARK", "driver (version " ARK_DRIVER_VERSION " for ARK Logic chipset",
 			  ARKChipsets);
 }
 
@@ -198,7 +198,7 @@ static Bool ARKProbe(DriverPtr drv, int flags)
 		pScrn = xf86ConfigPciEntity(pScrn, 0, usedChips[i], ARKPciChipsets,
 					    NULL, NULL, NULL, NULL, NULL);
 
-		pScrn->driverVersion = VERSION_MAJOR;
+		pScrn->driverVersion = ARK_VERSION_MAJOR;
 		pScrn->driverName = "ark";
 		pScrn->name = "ark";
 		pScrn->Probe = ARKProbe;
